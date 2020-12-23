@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 2436244332
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: ares_assets
+      Dependencies: {}
