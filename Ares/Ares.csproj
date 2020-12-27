@@ -5,11 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ares_assets" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>lib\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
       <HintPath>lib\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="EliteSpawningOverhaul">
+      <HintPath>lib\EliteSpawningOverhaul.dll</HintPath>
     </Reference>
     <Reference Include="MMHOOK_Assembly-CSharp">
       <HintPath>lib\MMHOOK_Assembly-CSharp.dll</HintPath>
@@ -61,6 +68,10 @@
   <ItemGroup>
     <Folder Include="lib\" />
     <Folder Include="obj\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ares_assets" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
