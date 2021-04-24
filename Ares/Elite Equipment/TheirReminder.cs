@@ -14,9 +14,9 @@ namespace Ares.Elite_Equipment
 {
     public class TheirReminder : AffixEquipmentBase<TheirReminder>
     {
-        public ConfigEntry<float> DurationOfLightningStormBuff;
-        public ConfigEntry<float> LightningStrikeCooldown;
-        public ConfigEntry<int> AmountOfLightningStrikesPerBarrage;
+        public ConfigOption<float> DurationOfLightningStormBuff;
+        public ConfigOption<float> LightningStrikeCooldown;
+        public ConfigOption<int> AmountOfLightningStrikesPerBarrage;
 
         public override string AffixEquipmentName => "Their Reminder";
 
@@ -57,9 +57,9 @@ namespace Ares.Elite_Equipment
 
         public void CreateConfig(ConfigFile config)
         {
-            DurationOfLightningStormBuff = config.Bind<float>(AffixEquipmentName, "Duration of Lightning Storm Buff", 5f, "Duration of the Lightning Storm Buff upon activation of the affix item.");
-            LightningStrikeCooldown = config.Bind<float>(AffixEquipmentName, "Duration Between Strikes on Lightning Storm Buff", 1f, "Duration between the strikes while Lightning Storm Buff is active.");
-            AmountOfLightningStrikesPerBarrage = config.Bind<int>(AffixEquipmentName, "Amount of Lightning Strikes per Barrage", 16, "How many lightning strikes should be in each strike period of the Lightning Storm Buff?");
+            DurationOfLightningStormBuff = config.ActiveBind<float>(AffixEquipmentName, "Duration of Lightning Storm Buff", 5f, "Duration of the Lightning Storm Buff upon activation of the affix item.");
+            LightningStrikeCooldown = config.ActiveBind<float>(AffixEquipmentName, "Duration Between Strikes on Lightning Storm Buff", 1f, "Duration between the strikes while Lightning Storm Buff is active.");
+            AmountOfLightningStrikesPerBarrage = config.ActiveBind<int>(AffixEquipmentName, "Amount of Lightning Strikes per Barrage", 16, "How many lightning strikes should be in each strike period of the Lightning Storm Buff?");
         }
 
         public void CreateBuff()
@@ -157,7 +157,7 @@ namespace Ares.Elite_Equipment
                 }
                 if(lightningTracker.LightningCooldown <= 0)
                 {
-                    for (int i = 1; i <= AmountOfLightningStrikesPerBarrage.Value; i++)
+                    for (int i = 1; i <= AmountOfLightningStrikesPerBarrage; i++)
                     {
                         var newProjectileInfo = new FireProjectileInfo
                         {
@@ -169,7 +169,7 @@ namespace Ares.Elite_Equipment
                             damageColorIndex = DamageColorIndex.Default,
                             procChainMask = default
                         };
-                        var theta = (Math.PI * 2) / AmountOfLightningStrikesPerBarrage.Value;
+                        var theta = (Math.PI * 2) / AmountOfLightningStrikesPerBarrage;
                         var angle = theta * i;
                         var radius = 20 + random.RangeFloat(-15, 15);
                         var positionChosen = new Vector3((float)(radius * Math.Cos(angle) + self.corePosition.x), self.corePosition.y + 1, (float)(radius * Math.Sin(angle) + self.corePosition.z));
@@ -182,7 +182,7 @@ namespace Ares.Elite_Equipment
                         newProjectileInfo.rotation = RoR2.Util.QuaternionSafeLookRotation(positionChosen + Vector3.down);
                         ProjectileManager.instance.FireProjectile(newProjectileInfo);
                     }
-                    lightningTracker.LightningCooldown = LightningStrikeCooldown.Value;
+                    lightningTracker.LightningCooldown = LightningStrikeCooldown;
                 }
             }
             orig(self);
@@ -195,7 +195,7 @@ namespace Ares.Elite_Equipment
 
             if (NetworkServer.active)
             {
-                body.AddTimedBuffAuthority(LightningStormBuffIndex, DurationOfLightningStormBuff.Value);
+                body.AddTimedBuffAuthority(LightningStormBuffIndex, DurationOfLightningStormBuff);
             }
             return true;
         }
